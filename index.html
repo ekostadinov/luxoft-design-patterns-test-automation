@@ -1,0 +1,293 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+	<meta charset="utf-8">
+	<title>Design patterns and concepts in test automation</automation:wq>
+	</title>
+	<meta name="author" content="Evgeni Kostadinov">
+	<meta name="apple-mobile-web-app-capable" content="yes">
+	<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+	<link rel="stylesheet" href="css/reveal.css">
+	<link rel="stylesheet" href="css/theme/moon.css" id="theme">
+	<!-- Theme used for syntax highlighting of code -->
+	<link rel="stylesheet" href="lib/css/zenburn.css">
+
+	<!-- Printing and PDF exports -->
+	<script>
+		var link = document.createElement('link');
+		link.rel = 'stylesheet';
+		link.type = 'text/css';
+		link.href = window.location.search.match(/print-pdf/gi) ? 'css/print/pdf.css' : 'css/print/paper.css';
+		document.getElementsByTagName('head')[0].appendChild(link);
+	</script>
+
+	<!--[if lt IE 9]>
+		<script src="lib/js/html5shiv.js"></script>
+		<![endif]-->
+</head>
+
+<body>
+	<div class="reveal">
+		<!-- Any section element inside of this container is displayed as a slide -->
+		<div class="slides">
+			<section>
+				<div>
+					<h2>Design patterns and concepts</h2>
+					<h3>In Test automation</h3>
+					<img width="600" height="250" data-src="images/sydney.jpg" alt="cloud-pattern">
+				</div>
+			</section>
+
+			<section>
+				<h2>Who am I?</h2>
+				<ul>
+					<li>Perpetual beta learner</li>
+					<li> QA Manager with groundwork experience</li>
+					<li> Test architect who enjoys the craft</li>
+				</ul>
+				<img width="350" height="200" data-src="images/ekostadinov.jpg" alt="my-pic-here">
+			</section>
+
+			<section class="stack present" data-previous-indexv="0">
+				<section id="fragments" class="present">
+					<h2>Table of contents</h2>
+					<ol>
+						<li>
+							<p data-fragment-index="4">Test harness architecture
+							</p>
+						</li>
+						<li>
+							<p class="fragment" data-fragment-index="1">Design patterns and concepts in test automation
+							</p>
+						</li>
+						<li>
+							<p class="fragment " data-fragment-index="2">xUnit patterns</p>
+						</li>
+						<li>
+							<p class="fragment  " data-fragment-index="3">CICD pipelines</p>
+						</li>
+					</ol>
+				</section>
+			</section>
+
+			<section>
+				<section>
+					<h2>Test harness architecture</h2>
+					<img width="550" height="300" data-src="images/framework.jpeg" alt="framework">
+				</section>
+				<section>
+					<h2>Automated test framework</h2>
+					<p>Test harness is a
+						collection of software and test data configured to test a
+						program unit by running it under varying conditions and
+						monitoring its behavior and outputs. It has three main parts:
+						<p class="fragment">the test execution <b style="color:red;">engine</b> (a.k.a Core features),
+						</p>
+						<p class="fragment">test <b style="color:red;">scripts</b> (our Business domain model)</p
+							class="fragment">
+						<p class="fragment">and the test <b style="color:red;">data</b></p>
+				</section>
+				<section>
+					<h2>Test code is <b style="color:red;">Production</b> code</h2>
+					<p class="fragment"><b style="color:red;">Same</b> concepts, principles and care should be applied.
+					</p>
+					<p class="fragment"><b style="color:red;">SDLC</b> phases too!</p>
+					<p class="fragment">Meaning, we should <b style="color:red;">unit test</b> our Engine design and
+						logic.</p>
+					<p class="fragment"><b style="color:red;">Workflow and good practices</b>, like Git branching.</p>
+					<p class="fragment">Maintenance and low complexity are <b style="color:red;">most cfitical</b>.</p>
+				</section>
+				<section>
+					<h2><b style="color:red;">Architecture</b> of the framework</h2>
+					<p>It's the highest level of <b style="color:red;">abstraction</b> of a system. What kind of data is
+						used (static, generators, files), how do modules interact with each other, reporting and
+						logging.</p>
+					<p class="fragment">Then move to <b style="color:red;">chooce</b> the frameworks, languages, scope,
+						goals, 3th party dependencies and integrations</p>
+				</section>
+				<section>
+					<h2><b style="color:red;">Types</b> of Automation Frameworks</h2>
+					<p><b style="color:red;">Record & Playback</b>, has its place under the sun. With disposable tests,
+						simple setup and no coding skills required - fits perfectly in short lived projects or non
+						technical team. </p>
+					<p class="fragment">The recorded tests should <b style="color:red;">not</b> be fixed! Rather, used
+						only until fit, to free time and support you. </p>
+				</section>
+				<section>
+					<h2><b style="color:red;">Types</b> of Automation Frameworks (2)</h2>
+					<p><b style="color:red;">Modular and Data-Driven</b> frameworks rely on different modules or
+						exported scripts that are later combined into more complex tests.</p>
+					<p class="fragment"> Data <b style="color:red;">layer</b> is added on top of other types, so to
+						segregate the test script logic and the test data from each other. Also, to power up the input
+						combinations.</p>
+				</section>
+				<section>
+					<h2><b style="color:red;">Types</b> of Automation Frameworks (3)</h2>
+					<p>A <b style="color:red;">Library</b> framework, upgrade the Module-Based Testing one, by
+						segregating the application into common functions. It can determine the common steps, group them
+						into functions under a library, and call those functions in the test scripts whenever required.
+					</p>
+					<p class="fragment"><b style="color:red;">Keyword-Driven</b> frameworks lay out each function of the
+						application under test
+						in a table with a series of
+						instructions in consecutive order for each test that needs to be run. The test data and script
+						logic are again separated.</p>
+				</section>
+				<section>
+					<h2><b style="color:red;">Types</b> of Automation Frameworks (4)</h2>
+					<p>A <b style="color:red;">Behavior-Driven Development</b> frameworks, lay out easily readable and
+						understandable format for the stakeholders. The BDD markups are integrated well with the
+						programming IDEs.
+					</p>
+					<p class="fragment"><b style="color:red;">Hybrid </b> testing frameworks is a combination of more
+						than one of the before mentioned ones. The best thing about such a setup is that it leverages
+						the
+						benefits of all kinds of associated frameworks.</p>
+				</section>
+				<section>
+					<h2><b style="color:red;">Types</b> of Automation Frameworks (5)</h2>
+					<p><b style="color:red;">AI-powered</b> frameworks are mostly bare promises for systems that can
+						write automated
+						tests automatically, codeless tests, or effortless/almost zero test maintenance.
+					</p>
+					<p class="fragment"><b style="color:red;">Future </b> of testing is yet to be achieved!</p>
+				</section>
+			</section>
+
+
+			<section>
+				<section>
+					<h2>Design patterns and concepts in test automation</h2>
+					<img width="550" height="300" data-src="images/blackboard.jpg" alt="blackboard">
+				</section>
+				<section>
+					<h2>Design <b style="color:red;">principles</b></h2>
+					<p>A principle is a <b style="color:red;">type of concept</b>. A concept is an idea about something.
+						A principle is ordinarily
+						meant to represent a special <b style="color:red;">relationship or rule</b> that is required or
+						expected to be in effect.
+					</p>
+					<p class="fragment"> Design principles provide high level guidelines to <b style="color:red;">design
+							better software</b>
+						applications. They do not provide implementation guidelines and are not bound to any programming
+						language.
+					</p>
+				</section>
+				<section>
+					<h2><b style="color:red;">SOLID</b> Principles</h2>
+					<p><b style="color:red;">Single Responsibility</b>, states that class should have one, and only one,
+						reason to change.</p>
+					<p class="fragment"><b style="color:red;">Open-closed Principle</b>:
+						Software entities should be extendable without actually changing their contents. </p>
+					<p class="fragment"><b style="color:red;">Liskov Substitution</b> simply means, that
+						a subclass class should be substitutable for their parent.</p>
+					<p class="fragment"><b style="color:red;">Interface Segregation</b>, implies that one should break
+						down the interfaces
+						in many smaller ones, so they better satisfy the exact needs of our clients.</p>
+					<p class="fragment"><b style="color:red;">Dependency Inversion</b> can be boiled down to Depend on
+						Abstractions not on implementation details.</p>
+				</section>
+				<section>
+					<h2>Other Principles</h2>
+					<p><b style="color:red;">Don't repeat yourself</b> aims to reduce repetition of code,
+						replacing it with abstractions or using data normalization to avoid redundancy.</p>
+					<p class="fragment"><b style="color:red;">You Ain't Gonna Need It</b>, advises not to add
+						functionality
+						until deemed necessary.</p>
+					<p class="fragment"><b style="color:red;">Keep It Simple, Stupid</b> states that most systems work
+						best
+						if they are kept simple rather than made complicated.</p>
+				</section>
+				<section data-transition="none">
+					<h2>Putting it all <b style="color:red;">together</b></h2>
+					<img width="750" height="500" data-src="images/dry.png" alt="dry">
+				</section>
+				<section data-transition="none">
+					<h2>Putting it all <b style="color:red;">together</b></h2>
+					<img width="750" height="500" data-src="images/dry1.png" alt="dry">
+				</section>
+				<section data-transition="none">
+					<h2>Putting it all <b style="color:red;">together</b></h2>
+					<img width="750" height="500" data-src="images/dry2.png" alt="dry">
+				</section>
+				<section data-transition="none">
+					<h2>Putting it all <b style="color:red;">together</b></h2>
+					<img width="750" height="500" data-src="images/dry2a.png" alt="dry">
+				</section>
+				<section data-transition="none">
+					<h2>Putting it all <b style="color:red;">together</b></h2>
+					<img width="750" height="500" data-src="images/dry2b.png" alt="dry">
+				</section>
+				<section data-transition="none">
+					<h2>Putting it all <b style="color:red;">together</b></h2>
+					<img width="750" height="500" data-src="images/dry2c.png" alt="dry">
+				</section>
+				<section data-transition="none">
+					<h2>Putting it all <b style="color:red;">together</b></h2>
+					<img width="750" height="500" data-src="images/dry3.png" alt="dry">
+				</section>
+			</section>
+			<section>
+				<section>
+					<h2>xUnit patterns</h2>
+					<img width="550" height="300" data-src="images/xunit.jpg" alt="xunit">
+				</section>
+				<section>
+					<h2><b style="color:red;">xUnit</b> Family</h2>
+					<p>xUnit tools, and <b style="color:red;">more importantly the philosophy</b>,
+						offer up a huge opportunity to programming teams. </p>
+					<p class="fragment">An opportunity to write<b style="color:red;"> powerful regression
+							test suites</b>
+						that enable teams to make drastic changes to a code-base with far less risk.
+					</p>
+					<p class="fragment">Opportunities to <b style="color:red;">re-think the design</b> process with Test
+						Driven Development.
+					</p>
+				</section>
+				<section>
+					<h2><b style="color:red;">xUnit</b> Patterns</h2>
+					<p>There are <b style="color:red;">more than 60</b>,
+						reusable solutions to a commonly occurring problems within a given testing context.</p>
+					<p class="fragment">Making tests<b style="color:red;"> first class citizens</b>.
+					</p>
+					<p class="fragment">Will improve your framework structure, allowing
+						clean and small, yet powerful extensions.</p>
+				</section>
+			</section>
+
+		</div>
+	</div>
+
+	<script src="lib/js/head.min.js"></script>
+	<script src="js/reveal.js"></script>
+
+	<script>
+
+		// More info https://github.com/hakimel/reveal.js#configuration
+		Reveal.initialize({
+			controls: true,
+			progress: true,
+			history: true,
+			center: true,
+
+			transition: 'slide', // none/fade/slide/convex/concave/zoom
+
+			// More info https://github.com/hakimel/reveal.js#dependencies
+			dependencies: [
+				{ src: 'lib/js/classList.js', condition: function () { return !document.body.classList; } },
+				{ src: 'plugin/markdown/marked.js', condition: function () { return !!document.querySelector('[data-markdown]'); } },
+				{ src: 'plugin/markdown/markdown.js', condition: function () { return !!document.querySelector('[data-markdown]'); } },
+				{ src: 'plugin/highlight/highlight.js', async: true, callback: function () { hljs.initHighlightingOnLoad(); } },
+				{ src: 'plugin/zoom-js/zoom.js', async: true },
+				{ src: 'plugin/notes/notes.js', async: true }
+			]
+		});
+
+	</script>
+
+</body>
+
+</html>
