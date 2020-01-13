@@ -1,4 +1,4 @@
-# luxsoft-design-patterns-test-automation
+# luxoft-design-patterns-test-automation
 
 Slides for LTS Tech Talks named series. The content is split in 3 topics:
 1. Design patterns and concepts in test automation
