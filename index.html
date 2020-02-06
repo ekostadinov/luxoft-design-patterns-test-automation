@@ -3,7 +3,7 @@
 
 <head>
 	<meta charset="utf-8">
-	<title>Design patterns and concepts in test automation</automation:wq>
+	<title>Design patterns and concepts in test automation</title>
 	</title>
 	<meta name="author" content="Evgeni Kostadinov">
 	<meta name="apple-mobile-web-app-capable" content="yes">
@@ -42,13 +42,31 @@
 			</section>
 
 			<section>
-				<h2>Who am I?</h2>
-				<ul>
-					<li>Perpetual beta learner</li>
-					<li> QA Manager with groundwork experience</li>
-					<li> Test architect who enjoys the craft</li>
-				</ul>
-				<img width="350" height="200" data-src="images/ekostadinov.jpg" alt="my-pic-here">
+				<h2>Topics in the <b style="color:red;">series</b></h2>
+				<p>1. Design <b style="color:red;">patterns and concepts</b> in test automation</p>
+				<p class="fragment">
+					2. Advanced design patterns in web test automation</p>
+				<p class="fragment">
+					3. Advanced design patterns - Desktop, API, Data warehouse</p>
+			</section>
+			<section>
+				<h2>Test automation patterns</h2>
+				<br>
+					 <b style="color:red;">Process</b> Patterns</br>
+						How set up or improve the test automation process.
+					 </p>
+				<p class="fragment">
+					<b style="color:red;">Management</b> Patterns </br>
+					How to manage test automation in the development process.
+					</p>
+				<p class="fragment">
+					<b style="color:red;">Design</b> Patterns </br>
+					How to design efficient and easy to maintaine automation <b>testware</b>.
+					</p>
+				<p class="fragment">
+					<b style="color:red;">Execution</b> Patterns </br>
+					How to take care that test execution is easy and reliable. 
+				</p>
 			</section>
 
 			<section class="stack present" data-previous-indexv="0">
@@ -56,18 +74,18 @@
 					<h2>Table of contents</h2>
 					<ol>
 						<li>
-							<p data-fragment-index="4">Test harness architecture
+							<p data-fragment-index="4">Test harness <b style="color:red;">architecture</b>
 							</p>
 						</li>
 						<li>
-							<p class="fragment" data-fragment-index="1">Design patterns and concepts in test automation
+							<p class="fragment" data-fragment-index="1"> <b style="color:red;">Design</b> patterns and concepts in test automation
 							</p>
 						</li>
 						<li>
-							<p class="fragment " data-fragment-index="2">xUnit patterns</p>
+							<p class="fragment " data-fragment-index="2"> <b style="color:red;">xUnit</b> patterns</p>
 						</li>
 						<li>
-							<p class="fragment  " data-fragment-index="3">CICD pipelines</p>
+							<p class="fragment  " data-fragment-index="3"> <b style="color:red;">CICD</b> pipelines</p>
 						</li>
 					</ol>
 				</section>
@@ -256,7 +274,271 @@
 					<p class="fragment">Will improve your framework structure, allowing
 						clean and small, yet powerful extensions.</p>
 				</section>
+				<section>
+					<h2>Golden hammer</h2>
+					<blockquote cite="">
+						"If all you have is a hammer, everything looks like a nail."
+					</blockquote>
+					<p class="fragment">Programmers usually go through,</p>
+					<p class="fragment">having <b style="color:red;">no idea</b> about Design patterns ...</p>
+					<p class="fragment">to <b style="color:red;">force</b> everything into patterns ...</p>
+					<p class="fragment">to ... <b style="color:red;">don't blindly follow</b> patterns, but allow them
+						to emerge from the solution.</p>
+				</section>
+				<section>
+					<img src="images/int_vs_em_arch.jpg" alt="design">
+				</section>
+				<section>
+					<h2>Design for testing</h2>
+					<p>Set of techniques that <b style="color:red;">add testability features</b> to a (hardware) product
+						design. The added features make it
+						easier to develop and apply manufacturing tests to the designed hardware. </p>
+				</section>
+				<section data-transition="none">
+					<h2>Design for testing (2)</h2>
+					<p><b style="color:red;">D</b>ependency <b style="color:red;">I</b>njection, relies on client to
+						provide the depended-on object to the SUT.
+					</p>
+					<img width="750" height="400" data-src="images/DI.gif" alt="dry">
+				</section>
+				<section data-transition="none">
+					<h2>Design for testing (2)</h2>
+					<p><b style="color:red;">D</b>ependency <b style="color:red;">I</b>njection, relies on client to
+						provide the depended-on object to the SUT.
+					</p>
+					<img width="750" height="400" data-src="images/DI2.gif" alt="">
+				</section>
+				<section >
+					<h2>Design for testing (3)</h2>
+					<p>Dependency <b style="color:red;">Lookup</b> allows the SUT to asks another
+						object to return the depended-on object before it uses it.
+					</p>
+					<img width="750" height="400" data-src="images/DL.gif" alt="">
+				</section>
+				<section data-transition="none">
+					<h2>Design for testing (3)</h2>
+					<p>Dependency <b style="color:red;">Lookup</b> allows the SUT to asks another
+						object to return the depended-on object before it uses it.
+					</p>
+					<img width="750" height="400" data-src="images/DL2.gif" alt="">
+				</section>
+				<section>
+					<h2>Design for testing (4)</h2>
+					<p><b style="color:red;">Humble Object</b>, extracts the logic into a separate
+						easy-to-test component that is decoupled from its
+						environment.</p>
+					<img width="750" height="400" data-src="images/HO.gif" alt="">
+			    </section>
+				<section>
+					<h2>Design for testing (5)</h2>
+					<p><b style="color:red;">Test Hook</b> is SUT modification that allows it to
+						behave differently during the test.</p>
+					<img width="750" height="400" data-src="images/TH.gif" alt="">
+				</section>
+				<section>
+					<h2>Fixture <b style="color:red;">Setup</b> Patterns</h2>
+					<p>
+						<b style="color:red;">Delegated </b>Setup - Each test creates its own Fresh Fixture by calling
+						Creation Methods from within the Test Methods.
+					</p>
+					<img width="750" height="400" data-src="images/delegated-setup.gif" alt="">
+				</section>
+				<section>
+						<h2>Fixture <b style="color:red;">Setup</b> Patterns</h2>
+					<p>
+						<b style="color:red;">Suite</b> Fixture Setup - We build/destroy the shared fixture in special
+						methods called by the Test Automation Framework before/after the first/last Test Method is
+						called.
+					</p>
+					<img width="750" height="400" data-src="images/suitefixture-setup.gif" alt="">
+				</section>
+				<section>
+						<h2>Fixture <b style="color:red;">Setup</b> Patterns</h2>
+					<p >
+						<b style="color:red;">Prebuilt</b> Fixture - Build the Shared Fixture separately from running
+						the tests.
+					</p>
+					<img width="750" height="400" data-src="images/prebuilt-fixture.gif" alt="">
 			</section>
+				<section>
+						<h2>Fixture <b style="color:red;">Setup</b> Patterns</h2>
+					<p>
+						<b style="color:red;">Inline</b> Setup - Each Test Method creates it's own Fresh Fixture by
+						calling the appropriate constructor methods to build exactly the test fixture it requires.
+					</p>
+					<img width="750" height="400" data-src="images/inline-setup.gif" alt="">
+				</section>
+				<section>
+					<h2>Fixture <b style="color:red;">Teardown</b> Patterns</h2>
+					<p>
+						<b style="color:red;">Automated </b>Teardown - a track is kept of all resources that are created
+						in a test and automatically destroy/free them during
+						teardown.
+					</p>
+					<img width="750" height="400" data-src="images/automated-teardown.gif" alt="">
+				</section>
+				<section data-transition="none">
+					<h2>Fixture <b style="color:red;">Teardown</b> Patterns</h2>
+					<p>
+						<b style="color:red;">Automated </b>Teardown - a track is kept of all resources that are created
+						in a test and automatically destroy/free them during
+						teardown.
+					</p>
+					<img width="750" height="400" data-src="images/automated-teardown2.gif" alt="">
+				</section>
+				<section data-transition="none">
+					<h2>Fixture <b style="color:red;">Teardown</b> Patterns</h2>
+					<p>
+						<b style="color:red;">Automated </b>Teardown - a track is kept of all resources that are created
+						in a test and automatically destroy/free them during
+						teardown.
+					</p>
+					<img width="750" height="400" data-src="images/automated-teardown3.gif" alt="">
+				</section>
+				<section>
+					<h2>Fixture <b style="color:red;">Teardown</b> Patterns</h2>
+					<p>
+						<b style="color:red;">Inline</b> Teardown - include teardown logic at the end of the Test Method
+						immediately after the result verification.
+					</p>
+					<img width="750" height="400" data-src="images/inline-teardown.gif" alt="">
+			</section>
+				<section>
+					<h2>Fixture <b style="color:red;">Teardown</b> Patterns</h2>
+					<p>
+						<b style="color:red;">Garbage-Collected</b> Teardown - We let the garbage collection mechanism
+						provided by the programming language clean up after our
+						test.
+					</p>
+					<img width="750" height="400" data-src="images/garbage-collected-teardown.gif" alt="">
+			</section>
+				<section>
+					<h2>Fixture <b style="color:red;">Teardown</b> Patterns</h2>
+					<p>
+						<b style="color:red;">Implicit</b> Teardown - The Test Automation Framework calls our clean up
+						logic in the tearDown method after every Test
+						Method.
+					</p>
+					<img width="750" height="400" data-src="images/implicit-teardown.gif" alt="">
+				</section>
+			</section>
+			<section>
+				<section>
+					<h2>CICD pipelines</h2>
+					<img src="images/pipetrain.jpg" alt="pipelines">
+				</section>
+				<section>
+					<h2><b style="color:red;">Continuous</b> integration</h2>
+					<p>
+						Is <b style="color:red;">more</b> than a CI server.
+					</p>
+					<p class="fragment">
+						Software engineering <b style="color:red;">practice</b> in which isolated changes are merged to
+						a shared mainline at least once a day.
+					</p>
+					<p class="fragment">
+						The goal of CI is to provide
+						<b style="color:red;">rapid feedback</b> so that if a defect is introduced into the
+						code base, it can be identified and corrected as soon as
+						possible.
+					</p>
+				</section>
+				<section>
+					<h2><b style="color:red;">Continuous</b> integration (2)</h2>
+					<p>Because CI detects deficiencies early on in development,
+						<b style="color:red;">defects</b> are typically smaller, less complex and easier to
+						resolve.</p>
+					<p class="fragment">
+						Always design automation <b style="color:red;">tests to run on a CI</b> pipelines. Real value is
+						provided there.
+					</p>
+				</section>
+				<section>
+					<h2><b style="color:red;">CI</b> patterns</h2>
+					<p>
+						Build software at <b style="color:red;">every change</b> - merged into
+						master. Goal is to immediately identify when problems occur.
+					</p>
+					<p class="fragment">
+						<b style="color:red;">Version</b> Control is one of the central pillars of CI, with industry-standard practices, like:
+						<ul class="fragment">
+							<li>Private Workspace</li>
+							<li>
+								Repository
+							</li>
+							<li>Master branch</li>
+							<li>Branching Policy </li>
+						</ul>
+					</p>
+				</section>
+				<section>
+					<h2><b style="color:red;">CI</b> patterns (2)</h2>
+					<p>
+						<b style="color:red;">Task</b>-level commit integrate enough progress work as contributions.
+					</p>
+					<p class="fragment">
+						<b style="color:red;">Label</b> build helps with setting milestones, usually a release, to mark important phase.
+					</p>
+					<p class="fragment">
+						Build <b style="color:red;">management</b> relies on CI server hooks and workflows.
+					</p>
+					<p class="fragment">
+						<b style="color:red;">Expedite fixes</b> help us with resolving ocassional build isses, via pulling only from master branch and broken builds immediate fixing.
+					</p>
+				</section>
+				<section>
+					<h2><b style="color:red;">Low-risk</b> releases</h2>
+					<p>
+						Are <b style="color:red;">Incremental</b>, our systems should be able to release individual changes independently.
+					</p>
+					<p class="fragment">
+						<b style="color:red;">Decouple</b> Deployment and Release helps us to roll out new versions of the system with no downtime required.
+					</p>
+					<p class="fragment">
+						Focus on <b style="color:red;">Reducing</b> batch size, pushes for frequent and smaller deployments.
+					</p>
+					<p>
+						Optimize for <b style="color:red;">Resilience</b>, shifts effort from preventing problems, to restoring as rapidly as possible when something goes wrong. 
+					</p>
+				</section>
+				<section>
+					<h2>Continuous<b style="color:red;"> Delivery</b></h2>
+					<p> Is the <b style="color:red;">ability</b> to get all changes into production, or into the hands
+						of users, safely and
+						quickly in a sustainable way.</p>
+					<p class="fragment">
+						Predictable, routine affairs that can be performed <b style="color:red;">on demand</b>.
+					</p>
+					<p class="fragment">
+						<b style="color:red;">Smoke </b> Test Pattern can execute a set of tests that are run to verify
+						the basic functionality of a build.
+					</p>
+				</section>
+				<section>
+					<img src="images/cicdcd.png" alt="" height="300" width="600">
+				</section>
+			</section>
+			<section>
+				<h2>Conclusion</h2>
+				<p>
+					Better <b style="color:red;">design</b> leads to scalable, maintainable and extendible testing solutions.
+				</p>
+				<p class="fragment">
+					Intentional <b style="color:red;">architecture</b> is not one time thing, as testware evolves.
+				</p>
+				<p class="fragment">
+					Automated tests are integral part of every CI/CD <b style="color:red;">pipeline</b>. 
+				</p>
+			</section>
+			<section>
+					<h2>THANK YOU!</h2>
+					<img width="450" height="300" data-src="images/pacman.gif">
+					<p>Contact me at:</p>
+					<img width="50" height="50" data-src="images/github.png" style="margin-bottom: -10px !important;"> /ekostadinov
+					<img width="50" height="50" data-src="images/gmail.jpg" style="margin-bottom: -10px !important;"> evgenikostadinov
+					<img width="50" height="50" data-src="images/in.png" style="margin-bottom: -10px !important;"> /in/ekostadinov
+			</section>
+
 
 		</div>
 	</div>
