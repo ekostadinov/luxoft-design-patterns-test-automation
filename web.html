@@ -1,0 +1,599 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+	<meta charset="utf-8">
+	<title>Advanced design patterns in web test automation</title>
+	</title>
+	<meta name="author" content="Evgeni Kostadinov">
+	<meta name="apple-mobile-web-app-capable" content="yes">
+	<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+	<link rel="stylesheet" href="css/reveal.css">
+	<link rel="stylesheet" href="css/theme/moon.css" id="theme">
+	<!-- Theme used for syntax highlighting of code -->
+	<link rel="stylesheet" href="lib/css/zenburn.css">
+
+	<!-- Printing and PDF exports -->
+	<script>
+		var link = document.createElement('link');
+		link.rel = 'stylesheet';
+		link.type = 'text/css';
+		link.href = window.location.search.match(/print-pdf/gi) ? 'css/print/pdf.css' : 'css/print/paper.css';
+		document.getElementsByTagName('head')[0].appendChild(link);
+	</script>
+
+	<!--[if lt IE 9]>
+		<script src="lib/js/html5shiv.js"></script>
+		<![endif]-->
+</head>
+
+<body>
+	<div class="reveal">
+		<!-- Any section element inside of this container is displayed as a slide -->
+		<div class="slides">
+			<section>
+				<div>
+					<h2>Advance Design Patterns</h2>
+					<h3>In Web Test automation</h3>
+					<img width="600" height="250" data-src="images/fe.png" alt="frontend"
+						style="background: none !important;">
+				</div>
+			</section>
+
+			<section>
+				<h2>Topics in the <b style="color:red;">series</b></h2>
+				<p>1. Design patterns and concepts in test automation</p>
+				<p class="fragment">
+					2. Advanced design patterns in <b style="color:red;">web</b> test automation</p>
+				<p class="fragment">
+					3. Advanced design patterns - Desktop, API, Data warehouse</p>
+			</section>
+
+			<section class="stack present" data-previous-indexv="0">
+				<section id="fragments" class="present">
+					<h2>Table of contents</h2>
+					<ol>
+						<li>
+							<p data-fragment-index="4">Mobile testing considerations
+							</p>
+						</li>
+						<li>
+							<p class="fragment" data-fragment-index="1">Beyond Page objects
+							</p>
+						</li>
+						<li>
+							<p class="fragment " data-fragment-index="2">Advanced patterns</p>
+						</li>
+						<li>
+							<p class="fragment  " data-fragment-index="3">Good practices</p>
+						</li>
+					</ol>
+				</section>
+			</section>
+
+			<section>
+				<section>
+					<h2>Mobile testing considerations</h2>
+					<img width="550" height="300" data-src="images/mobile.png" alt="mobile">
+				</section>
+				<section>
+					<h2>Challenges</h2>
+					<p>Heavy <b style="color:red;">environment</b> and infrastructure setup.</p>
+					<p class="fragment">Executing tests <b style="color:red;">in parallel.</b></p>
+					<p class="fragment">How to leverage <b style="color:red;">common code</b> as much as possible and
+						drive the
+						web/mobile workflow based on the configuration. Less code, less maintenance.</p>
+				</section>
+				<section>
+					<h2>Challenges (2)</h2>
+					<p>Device <b style="color:red;">fragmentation</b> should be limited, so it doesn't negatively affect our setup.</p>
+					<p class="fragment">Screen size and OS fragmentation too, have to be <b style="color:red;">carefully</b> picked up.</p>
+					<p class="fragment"><b style="color:red;">Localisation</b> when it comes to users being able to change the app language to their own.</p>
+				</section>
+			</section>
+
+
+			<section>
+				<section>
+					<h2><b style="color:red;">Beyond</b> page objects</h2>
+					<img src="images/champagne.png" alt="wrong-design">
+				</section>
+				<section>
+					<h2>BEWARE OF LIMITATIONS</h2>
+					<p>
+						<b style="color:red;">Wrong by design</b>, as the object knows how to acts upon itself.
+					</p>
+					<p class="fragment">
+						Often leads to entire PageObject complex abstraction layer and <b
+							style="color:red;">taxonomy</b>.
+					</p>
+					<p class="fragment">
+						Selectors are hardcoded in your objects, so <b style="color:red;">no configuration</b> is
+						possible.
+					</p>
+				</section>
+				<section>
+					<h2>BEWARE OF LIMITATIONS (2)</h2>
+					<p>
+						<b style="color:red;">Automatically built</b> Page Objects are hard to maintain and to use.
+						 Pretty much no grouping of elements into headers and footers, or identified widgets, 
+						 there would just be a big list of stuff.
+					</p>
+					<p class="fragment">
+						It might <b	style="color:red;">limit your design</b>, e.g. you staring to ignore better abstractions.
+					</p>
+					<p class="fragment">
+						 <b style="color:red;">Hinders</b> flexibility when refactoring (both structure and function).
+					</p>
+				</section>
+			</section>
+
+			<section>
+				<section>
+					<h2>Other Patterns</h2>
+					<img src="images/chair.jpg" alt="better design">
+				</section>
+				<section>
+					<h2>Object <b style="color:red;">Map</b></h2>
+					<p>
+						File that maintains a <b style="color:red;">logical representation</b> of each application
+						object
+						that is referenced in an automated script. The purpose of the Object
+						Map is to allow for the <b style="color:red;">separation</b> of application object property data
+						known as the Physical Description, from the automated script via a
+						parameter known as the Logical Name.
+					</p>
+					<p class="fragment">
+						Use one <b style="color:red;">single point of entry</b> to store objects of any type in memory
+						and retrieve them using a unique identifier. Assure that only one
+						instance of an object exists for each specific data-item.
+					</p>
+				</section>
+				<section>
+					<h2>Object <b style="color:red;">Map</b>(2)</h2>
+					<img src="images/objmap.png" alt="objmap" style="background: #eee8d5">
+				</section>
+				<section>
+					<h2>Python example</h2>
+					<pre>test_data/objectmap.yaml
+						<code class="hljs yaml has-highlights" data-trim="" data-line-numbers="4,8-9">
+							login_username:
+    locator: name
+    selector: username
+login_password:
+    locator: name
+    selector: password
+login_button:
+    locator: class
+    selector: btn-main-green
+...
+                        </code></pre>
+				</section>
+				<section>
+					<h2>Python example</h2>
+					<pre>core/elements_loader.py
+						<code class="hljs python has-highlights" data-trim="" data-line-numbers="4,8-9">
+							from selenium.webdriver.common.by import By
+
+# avoid ContextInjection at this layer, if using Cucumber 
+def get_by_key(driver, element_name, object_map):
+    # avoid complex if-else constructs
+    find_by = {
+      'xpath': driver.find_element_by_xpath,
+      'css': driver.find_element_by_css_selector,
+      ...
+    }
+    ui_element_locator = object_map[element_name]['locator']
+    ui_element_selector = object_map[element_name]['selector']
+    # optional webdriver wait for element
+
+    return find_by[ui_element_locator](ui_element_selector)
+						</code></pre>
+				</section>
+				<section>
+					<h2>Python example</h2>
+					<pre>dsl/issues.py
+						<code class="hljs python has-highlights" data-trim="" data-line-numbers="4,8-9">
+							from core import elements_loader
+
+def add_new_issue(context, title):
+   # other related domain specific flow and actions
+    elements_loader.get_by_key(context.session.driver, 'name_input', 
+                               context.object_map).send_keys(title)
+    elements_loader.get_by_key(context.session.driver, 'save_button', 
+                               context.object_map).click()
+						</code></pre>
+				</section>
+				<section>
+					<h2>Python example</h2>
+					<pre>spec/edit_issue_tests.py
+						<code class="hljs python has-highlights" data-trim="" data-line-numbers="4,8-9">
+							from dsl import issues
+from random import randrange
+
+def editing_issue_name_should_save_changes(context):
+   # test data could be fetched from elsewhere
+   new_issue_title = 'My valid issue title'
+   edited_issue_title = new_issue_title + str(randrange(10000))
+   # setup
+   issues.add_new_issue(context, issue_title)
+   # actual test
+   issues.edit_issue(context, edited_issue_title)
+   issue.verify_issue_title(context, edited_issue_title)
+						</code></pre>
+				</section>
+				<section>
+					<h2><b style="color:red;">Loadable</b> Component</h2>
+					<p>
+						Aims to make writing PageObjects <b style="color:red;">less pain</b>ful, but there is a catch ...
+					</p>
+					<p class="fragment">
+						it only works well in complex <b style="color:red;">"deep"</b> page hierarchy (journeys), 
+						like SPA.
+					</p>
+					<p class="fragment">
+						<b style="color:red;">Slow</b>LoadableComponent extends the pattern, via adding explicit waits
+						for loading.
+					</p>
+				</section>
+				<section>
+					<img src="images/loadablecomp2.jpg" alt="loadablecomp">
+				</section>
+				<section>
+					<h2><b style="color:red;">Loadable</b> Component (2)</h2>
+					<p>
+						Helps us with <b style="color:red;">asserting</b> that all dynamic content on our 
+						page has been fully loaded and that all elements required in our test script are present on the page.
+					</p>
+					<p>
+						The <b style="color:red;">load()</b> method contains the code that is executed to navigate to the page, while the <b style="color:red;">isLoaded()</b> method is
+						 used to evaluate whether we are on the correct page and whether page loading has finished successfully.
+					</p>
+				</section>
+				<section>
+					<h2>JAVA example</h2>
+					<pre>AddIssue class turned to LoadableComponent
+						<code class="hljs java has-highlights" data-trim="" data-line-numbers="4,8-9">
+							public class AddIssue extends LoadableComponent &lt;AddIssue&gt; {
+  // rest of the class is the same
+  @Override
+  protected void load() {
+    driver.get("https://yourissuetracker.com/issues/new");
+  }
+
+  @Override
+  protected void isLoaded() throws Error {
+    String url = driver.getCurrentUrl();
+    assertTrue("Not on AddIssue page: " + url, url.endsWith("/new"));
+  }
+}
+                        </code></pre>
+				</section>
+				<section>
+					<img src="images/loadablecomp.jpg" alt="loadablecomp" height="670">
+				</section>
+				<section>
+					<h2><b style="color:red;">Screenplay</b> Pattern</h2>
+					<p>
+						An actor-centric model that provides a clear distinction between <b
+							style="color:red;">goals</b>,
+						<b style="color:red;">tasks</b> and <b style="color:red;">actions</b>.
+					</p>
+					<p class="fragment">
+						Thus making it easier for teams to write <b style="color:red;">layered</b> tests more
+						consistently.
+					</p>
+				</section>
+				<section>
+					<h2><b style="color:red;">Screenplay</b> Pattern (2)</h2>
+					<p>
+					Uses good software engineering <b style="color:red;">principles</b> such as the 
+					<ul>
+						<li>Single Responsibility Principle,</li>
+						<li>the Open-Closed Principle,</li>
+						<li>favours composition over inheritance,</li>
+						<li>employs thinking from Domain Driven Design </li>
+						<li>supports effective use of abstraction layers.</li>
+					</ul>
+					</p>	 
+				</section>
+				<section>
+					<img src="images/screenplay.jpg" alt="screenplay">
+				</section>
+				<section data-transition="none">
+					<img src="images/screenplay2.jpg" alt="screenplay">
+				</section>
+				<section data-transition="none">
+					<img src="images/screenplay3.jpg" alt="screenplay">
+				</section>
+				<section data-transition="none">
+					<img src="images/screenplay4.jpg" alt="screenplay">
+				</section>
+				<section data-transition="none">
+					<img src="images/screenplay5.jpg" alt="screenplay">
+				</section>
+				<section data-transition="none">
+					<img src="images/screenplay6.jpg" alt="screenplay">
+				</section>
+				<section data-transition="none">
+					<img src="images/screenplay7.jpg" alt="screenplay">
+				</section >
+				<section data-transition="none">
+					<img src="images/screenplay8.jpg" alt="screenplay">
+				</section>
+				<section>
+					<h2>JS example</h2>
+					<pre>spec/add_issues.js
+						<code class="hljs javascript has-highlights" data-trim="" data-line-numbers="4,8-9">
+							describe('Added issue', () => {
+  it('should be saved', () => {
+    ...
+    const john = Actor.named('John');
+    const issueTitle = 'My valid test issue'
+    john.attemptsTo(
+      Start.withAnEmptyIssueList(),
+      AddIssue.named(issueTitle)
+    )
+    expect(john.toSee(IssueItems.First.Displayed)).equal([ issueTitle ]);  
+  })
+})
+                        </code></pre>
+				</section>
+				<section>
+					<h2><b style="color:red;">Mission</b> Pattern</h2>
+					<blockquote cite="">
+						"The Agent remembers. The Agent uses Tools. The Agent performs Missions."
+					</blockquote>
+					<p class="fragment">
+						Helps us <b style="color:red;">modularise our code</b> and create <b
+							style="color:red;">personas</b> which describe business or functional
+						interactions of software users. Users can also be clients of <b style="color:red;">different
+							layers</b> of your software
+						architecture.
+					</p>
+				</section>
+				<section>
+					<h2><b style="color:red;">Mission</b> Pattern</h2>
+					<img src="images/mission.png" alt="mission">
+				</section>
+				<section>
+					<h2>JS example</h2>
+					<pre>spec/add_issues.js
+						<code class="hljs javascript has-highlights" data-trim="" data-line-numbers="4,8-9">
+							describe('Added issue', () => {
+  it('state should be changed only by admins', () => {
+    ...
+    const agentJohn = newWebCustomerMission.performs(
+                        registerAdminWith('John',adminPassword,dob));
+    agentJohn.obtain(chromeDriver, databaseDriver);
+    webDriverTool = agentJohn.usingThe(chromeDriver);
+    createIssueMission.createIssue(webDriverTool, issueTitle)
+	              .fillIn('issueStateInput', with(issueState))
+                      .clickOn('saveIssueButton');
+    const dbIssue = fetchIssueFromDB(issueTitle).accomplishAs(agentJohn);
+    // secondary concepts are memory and screens
+    agentJohn.keepsInMind('issue.state', bdIssue.State);
+    verifyAs(agentJohn).that(
+      issuesListPage.First.State, hasText(agent.recalls('issue.state')));
+  })
+})
+                        </code></pre>
+				</section>
+	
+			</section>
+
+			<section>
+				<section>
+					<h2><b style="color:red;">Good</b> practices</h2>
+					<img src="images/bulb.jpeg" alt="bulb" height="450">
+				</section>
+				<section>
+					<h2><b style="color:red;">Hermetic</b> Tests</h2>
+					<p>Each test is atomic in nature, so <b style="color:red;">no dependency</b> on other state or data,
+						but its own.</p>
+					<p class="fragment">
+						We can execute the test in different order based on needs, or in parallel, having the <b
+							style="color:red;">same result</b> every time.
+					</p>
+					<p class="fragment">
+						Self-suficient tests give <b style="color:red;">historically reproducible</b> results, thus
+						support our culprit finding
+						(what changes broke the build).
+					</p>
+				</section>
+				<section>
+					<h2>Hermetic Tests (2)</h2>
+					<p><b style="color:red;">Benefits</b>: 
+					  <ul>
+						  <li>Clean start</li>
+						  <li>Resilience</li>
+						  <li>Modularity</li>
+						  <li>Random run order</li>
+						  <li>Parallel testing</li>
+					  </ul>
+					</p>
+				</section>
+				<section>
+					<h2>Hermetic Tests (3)</h2>
+					<p><b style="color:red;">Considerations</b>: 
+					  <ul>
+						  <li>Upfront design</li>
+						  <li>Complexity increase, that needs proper Fixture strategies</li>
+						  <li>Resource usage increase</li>
+					  </ul>
+					</p>
+	
+				</section>
+				<section>
+					<h2><b style="color:red;">Fluent</b> Invocations</h2>
+					<p>
+						Is helping the test developer to <b style="color:red;">determine</b> if he/she can use the
+						object at hand or should switch to other one.
+					</p>
+					<p class="fragment">
+						This pattern is <b style="color:red;">important for scaling</b> a test automation framework. For
+						example, large
+						amount of pages, elements and methods available for usage may create a confusion.
+					</p>
+					<p class="fragment">
+						It allows you to <b style="color:red;">DRY your code</b>, since you avoid putting the object
+						again and again before invoking its methods.
+					</p>
+				</section>
+				<section>
+					<h2>JS example</h2>
+					<pre>pretty standard way
+						<code class="hljs javascript has-highlights" data-trim="" data-line-numbers="4,8-9">
+							describe('Login to account', () => {
+    it('should work with valid credentials', () => {
+        ...
+        homePage.typeUsername(user.email);
+        homePage.typePassword(user.password);
+        homePage.clickSignInButton();
+	  
+        assertThat(homePage.isSignedIn(user));  
+    })
+})
+
+                        </code></pre>
+				</section>
+				<section>
+					<h2>JS example</h2>
+					<pre>chained invocations
+						<code class="hljs javascript has-highlights" data-trim="" data-line-numbers="4,8-9">
+							describe('Login to account', () => {
+    it('should work with valid credentials', () => {
+        ...
+        homePage
+          .typeUsername(user.email);
+          .typePassword(user.password);
+          .clickSignInButton();
+	  
+        assertThat(homePage.isSignedIn(user));  
+    })
+})
+
+                        </code></pre>
+				</section>
+                <section>
+					<h2><b style="color:red;">Back Door</b> Manipulation</h2>
+					<p>
+						We set up the test fixture or verify the outcome by going through a back door (such as direct database
+						 <b style="color:red;">access</b>.)
+					</p>
+					<p class="fragment">
+						If we have access to the state of the SUT, the test can set up the pre-test state 
+						of the SUT by <b style="color:red;">bypassing</b> the normal API and interacting directly with whatever is holding that 
+						state.
+					</p >
+				</section>
+				<section>
+					<h2><b style="color:red;">Back Door</b> Manipulation (2)</h2>
+					<p>
+						Back Door Fixture <b style="color:red;">Setup</b> helps us with Access to the state	of the SUT from outside the UI. 
+						Need to be mindful that,
+					</p>
+					<p class="fragment">
+						we are bypassing a lot of the <b style="color:red;">"edit checks"</b> (input validation) normally done by the UI.
+					</p >
+					<p class="fragment">
+						Tests become much more closely <b style="color:red;">coupled</b> to the System.
+					</p >
+					<p class="fragment">
+					Must leave <b style="color:red;">at least one</b> End-user journey to be covered completely using the GUI.
+					</p >
+				</section>
+				<section>
+					<h2><b style="color:red;">Back Door</b> Manipulation (3)</h2>
+					<p>
+						Back Door <b style="color:red;">Verification</b> can help us assert that actual data is in the persistence layer.
+					</p>
+					<p class="fragment">
+						Back Door <b style="color:red;">Tear Down</b> is especially beneficial if we can use bulk database commands to wipe clean whole DB tables.
+					</p >
+				</section>
+				<section>
+					<h2>JS example</h2>
+					<pre>spec/add_issues.js
+						<code class="hljs javascript has-highlights" data-trim="" data-line-numbers="4,8-9">
+							describe('Added issue', () => {
+  it('state should be changed only by admins', () => {
+    ...
+    // we can leverage Hexagonal Architecture, thus work 
+    // with either a UI or a database
+    agentJohn.obtain(chromeDriver, apiDriver);
+    agentJohn.performs(put('/register', 
+                           requestWith(username,password,dob)), 
+                           returnsStatusCode(201));
+    verifyAs(agentJohn).that(get('/users/',
+                                 requestWith(agentJohn.Id)),
+                                 returnsStatusCode(200));
+  })
+})
+                        </code></pre>
+				</section>
+	
+
+			</section>
+
+			<section>
+				<h2>Conclusion</h2>
+				<p>
+					Always <b style="color:red;">consider the applicability</b> of the design solutions in your context.
+				</p>
+				<p class="fragment">
+					Allow them to <b style="color:red;">evolve and build</b> on top of existing ones.
+				</p>
+				<p class="fragment">
+					Design for <b style="color:red;">synergy</b> with the other parts of our ecosystem.
+				</p>
+			</section>
+
+			<section>
+				<h2>THANK YOU!</h2>
+				<img width="450" height="300" data-src="images/pacman.gif">
+				<p>Contact me at:</p>
+				<img width="50" height="50" data-src="images/github.png" style="margin-bottom: -10px !important;">
+				/ekostadinov
+				<img width="50" height="50" data-src="images/gmail.jpg" style="margin-bottom: -10px !important;">
+				evgenikostadinov
+				<img width="50" height="50" data-src="images/in.png" style="margin-bottom: -10px !important;">
+				/in/ekostadinov
+			</section>
+
+
+		</div>
+	</div>
+
+	<script src="lib/js/head.min.js"></script>
+	<script src="js/reveal.js"></script>
+
+	<script>
+
+		// More info https://github.com/hakimel/reveal.js#configuration
+		Reveal.initialize({
+			controls: true,
+			progress: true,
+			history: true,
+			center: true,
+
+			transition: 'slide', // none/fade/slide/convex/concave/zoom
+
+			// More info https://github.com/hakimel/reveal.js#dependencies
+			dependencies: [
+				{ src: 'lib/js/classList.js', condition: function () { return !document.body.classList; } },
+				{ src: 'plugin/markdown/marked.js', condition: function () { return !!document.querySelector('[data-markdown]'); } },
+				{ src: 'plugin/markdown/markdown.js', condition: function () { return !!document.querySelector('[data-markdown]'); } },
+				{ src: 'plugin/highlight/highlight.js', async: true, callback: function () { hljs.initHighlightingOnLoad(); } },
+				{ src: 'plugin/zoom-js/zoom.js', async: true },
+				{ src: 'plugin/notes/notes.js', async: true }
+			]
+		});
+
+	</script>
+
+</body>
+
+</html>
