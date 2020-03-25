@@ -1,0 +1,666 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+	<meta charset="utf-8">
+	<title>Advanced design patterns - API, Desktop, DWH</title>
+	</title>
+	<meta name="author" content="Evgeni Kostadinov">
+	<meta name="apple-mobile-web-app-capable" content="yes">
+	<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+	<link rel="stylesheet" href="css/reveal.css">
+	<link rel="stylesheet" href="css/theme/moon.css" id="theme">
+	<!-- Theme used for syntax highlighting of code -->
+	<link rel="stylesheet" href="lib/css/zenburn.css">
+
+	<!-- Printing and PDF exports -->
+	<script>
+		var link = document.createElement('link');
+		link.rel = 'stylesheet';
+		link.type = 'text/css';
+		link.href = window.location.search.match(/print-pdf/gi) ? 'css/print/pdf.css' : 'css/print/paper.css';
+		document.getElementsByTagName('head')[0].appendChild(link);
+	</script>
+
+	<!--[if lt IE 9]>
+		<script src="lib/js/html5shiv.js"></script>
+		<![endif]-->
+</head>
+
+<body>
+	<div class="reveal">
+		<!-- Any section element inside of this container is displayed as a slide -->
+		<div class="slides">
+			<section>
+				<div>
+					<h2>Advance Design Patterns</h2>
+					<h3>Desktop, API, Data warehouse</h3>
+					<img width="600" height="250" data-src="images/be.png" alt="frontend"
+						style="background: none !important;">
+				</div>
+			</section>
+
+			<section>
+				<h2>Topics in the <b style="color:red;">series</b></h2>
+				<p>1. Design patterns and concepts in test automation</p>
+				<p class="fragment">
+					2. Advanced design patterns in web test automation</p>
+				<p class="fragment">
+					3. Advanced design patterns - <b style="color:red;">Desktop, API, Data warehouse</b></p>
+			</section>
+
+			<section class="stack present" data-previous-indexv="0">
+				<section id="fragments" class="present">
+					<h2>Table of contents</h2>
+					<ol>
+						<li>
+							<p data-fragment-index="4">Desktop testing considerations
+							</p>
+						</li>
+						<li>
+							<p class="fragment" data-fragment-index="1">API testing
+							</p>
+						</li>
+						<li>
+							<p class="fragment " data-fragment-index="2">Data warehouse testing</p>
+						</li>
+					</ol>
+				</section>
+			</section>
+
+			<section>
+				<section>
+					<h2><b style="color:red;">Desktop</b> testing considerations</h2>
+					<img width="550" height="300" data-src="images/desktop.jpg" alt="mobile">
+				</section>
+				<section>
+					<h2>Challenges</h2>
+					<p>Heavy <b style="color:red;">environment</b> and infrastructure setup.</p>
+					<p class="fragment">Executing tests <b style="color:red;">in parallel.</b></p>
+					<p class="fragment">How to leverage <b style="color:red;">common code</b> as much as possible and
+						drive the
+						web/mobile/desktop workflow based on the configuration.</p>
+				    <p class="fragment">
+                        CI <b style="color:red;">server desktop</b> setup and keep-alive sessions.
+					</p>
+					<p class="fragment">
+						Many automation <b style="color:red;">tools</b> are based off on coordinates or image recognition, but those tend to be flaky, more often than not.
+					</p>
+				</section>
+				<section>
+					<h2>Screen objects</h2>
+					<p>
+						As Design patterns are <b style="color:red;">general reusable</b> solutions to a commonly occurring problems within 
+						a given <b style="color:red;">context</b>.
+					</p>
+					<p class="fragment">
+						It is feasible to apply PageObject  <b style="color:red;">model</b> and <a href="https://pywinauto.readthedocs.io/en/latest/">pywinauto</a>, 
+						since selectors and their resolution are resolved at a <b style="color:red;">single place</b> in our code.
+					</p>
+				</section>
+				<section data-transition="none">
+					<h2>Python example</h2>
+					<pre>screens/notepad_main_screen.py
+						<code class="hljs python has-highlights" data-trim="" data-line-numbers="4,8-9">
+							from pywinauto.application import Application
+
+class NotepadBaseScreen(object):
+
+    def __init__(self):
+        self.app = Application(backend="uia").start("notepad.exe")
+
+    def save_document(text_to_save):
+	# real encapsulation happens, as element and action are one
+	self.app.UntitledNotepad.menu_select("File->SaveAs")
+	self.app.SaveAs.wait("exists enabled visible ready")
+	self.app.SaveAs.ComboBox5.select("UTF-8")
+	self.app.SaveAs.edit1.set_text(text_to_save)
+	self.app.SaveAs.Save.click()
+                        </code></pre>
+				</section>
+				<section data-transition="none">
+					<h2> Python example</h2>
+					<img src="./images/pomdsktp.png" alt="" style="margin: 0 !important">
+				</section>
+			</section>
+			<section>
+				<section>
+					<h2><b style="color:red;">API</b> testing</h2>
+					<img src="images/graph.jpg" alt="wrong-design" width="550" height="300">
+				</section>
+				<section>
+					<h2>Rest API</h2>
+					<p>
+						We focus on  sending <b style="color:red;">requests</b> to the API, receive  <b style="color:red;">responses</b>, and verify the system's behaviour. 
+					</p>
+					<p class="fragment">
+						As backend, it mainly concentrates on the <b style="color:red;">Business</b> (domain) logic layer of the software architecture.
+					</p>
+					<p class="fragment">
+						<b style="color:red;">Technical acumen</b> is a must! We need to deeply understand how technology <b style="color:red;">stack works</b>.
+					</p>
+				</section>
+				<section>
+					<h2>API testing approach</h2>
+					<p>
+						Following points, aim to help us perform API Testing:
+					</p>
+					<p class="fragment">
+						Understanding the functionality of the API program and clearly <b style="color:red;">define the scope</b> of the tests.
+					</p>
+					<p class="fragment">
+						Apply <b style="color:red;">testing techniques</b> such as BVA, Equivalence classes, and Error guessing when designing and implementing the tests.
+					</p>
+					<p class="fragment">
+						<b style="color:red;">Input</b> parameters for the API need to be defined appropriately.
+					</p>
+					<p class="fragment">
+						<b style="color:red;">Execute</b> the test cases and compare expected and actual results.
+					</p>
+				</section>
+				<section>
+					<h2><b style="color:red;">DSL</b></h2>
+					<blockquote cite="https://en.wikipedia.org/wiki/Domain-specific_language">
+						“A domain-specific language (DSL) is a computer language specialized to a particular application domain.” </br>
+																				-- Wikipedia
+					</blockquote>
+				</section>
+				<section>
+					<h2>DSL (2)</h2>
+					<p>
+						Is <b style="color:red;">created specifically</b> to solve problems in a particular domain and is not intended to be able to solve problems 
+						outside of it (although that may be technically possible).
+					</p>
+					<p class="fragment">
+						The DSL could be as simple as an object that interacts with the SUT.
+						 As you implement it, you can make up the structure for it as it <b style="color:red;">suits your need</b>.
+					</p>
+				</section>
+				<section>
+					<h2>DSL (3)</h2>
+					<ol> Could sets up data in the database,
+						<li>
+							<p data-fragment-index="4">or in-memory versions of it
+							</p>
+						</li>
+						<li>
+							<p class="fragment" data-fragment-index="1">or create mocks
+							</p>
+						</li>
+						<li>
+							<p class="fragment " data-fragment-index="2">or interact with the system by executing the commands we're testing</p>
+						</li>
+						<li>
+							<p class="fragment">
+                                 and finally do the assertions of the state of the system.
+							</p>
+						</li>
+					</ol>
+				</section>
+				<section>
+					<h2>C# example</h2>
+					<pre>dsl/wallet.cs
+						<code class="hljs csharp has-highlights" data-trim="" data-line-numbers="4,8-9">
+public class Wallet
+{
+  private readonly AtmService _atmService;
+  private readonly AccountService _accountService;
+							
+  public Wallet(AtmService atmService, AccountService accountService)
+  {
+    _atmService = atmService;
+    _accountService = accountService;
+  }
+							
+  public void Withdraw(int accountNumber, int pin, int amount)
+  {  // Call the service wrapper for our account
+    _accountService.SetAuthotization(accountNumber, pin);
+    _atmService.Withdraw(accountNumber, amount);
+  }
+}
+						</code></pre>
+				</section>
+				<section>
+					<h2> <b style="color:red;">Command</b>  pattern</h2>
+					<p>
+						A behavioral design pattern in which an object is used
+						to encapsulate all information needed to <b style="color:red;">perform an action or trigger an event</b> at a later time.
+					</p>
+					<p class="fragment">
+						<b style="color:red;">Encapsulate a request</b> as an object, thereby letting you parametrize clients with different requests, 
+						queue or log requests, and support undoable operations.
+					</p>
+					<p class="fragment">
+						Depending on the programming language, we might need to go with <b style="color:red;">Servant</b> design pattern, to pass
+						 an object, implementing an interface which declares the signature of passed method.
+					</p>
+				</section>
+				<section>
+					<h2> Command pattern (2)</h2>
+					<p>
+						A  <b style="color:red;">command</b> knows about receiver and invokes its methods.
+					</p>
+					<p class="fragment">
+						The <b style="color:red;">receiver</b> and parameter values for its methods are stored in the command.
+					</p>
+					<p class="fragment">
+						An  <b style="color:red;">invoker</b> object knows how to execute a command, and optionally does bookkeeping about the command execution. 
+					</p>
+					<p class="fragment">
+						Invoker, command and receiver objects are held by a  <b style="color:red;">client</b>, which decides 
+						which receiver it should assign to the command, and which commands to assign to the invoker. 
+						The client decides which commands to execute at which points.
+					</p>
+				</section>
+				<section data-transition="none">
+					<h2> Command pattern (3)</h2>
+					<img src="./images/cmd.png" alt="">
+				</section>
+				<section data-transition="none">
+					<h2> Command pattern (3)</h2>
+					<img src="./images/cmd2.png" alt="">
+				</section>
+				<section data-transition="none">
+					<h2> Command pattern (3)</h2>
+					<img src="./images/cmd3.png" alt="">
+				</section>
+				<section data-transition="none">
+					<h2> Command pattern (3)</h2>
+					<img src="./images/cmd4.png" alt="">
+				</section>
+				<section data-transition="none">
+					<h2> Command pattern (3)</h2>
+					<img src="./images/cmd5.png" alt="">
+				</section>
+				<section data-transition="none">
+					<h2> Command pattern (3)</h2>
+					<img src="./images/cmd6.png" alt="">
+				</section>
+				<section>
+					<h2><b style="color:red;">Strategy</b> pattern</h2>
+					<p>
+						Could be used to if we need <b style="color:red;">more than one implementation</b> of the same workflow, 
+						which is done differently. 
+					</p>
+					<p class="fragment">
+						Depending on the context we could choose the implementation, at <b style="color:red;">runtime</b>.
+					</p>
+				</section>
+				<section data-transition="none">
+					<h2> Strategy pattern (2)</h2>
+					<img src="./images/strg.png" alt="" height="300px" width="500px">
+				</section>
+				<section>
+					<h2>Python example</h2>
+					<pre>dsl/register_strategies.py
+						<code class="hljs python has-highlights" data-trim="" data-line-numbers="4,8-9">
+import types
+
+class RegisterStrategy:
+    def __init__(self, func = None):
+        if func is not None:
+            self.execute = types.MethodType(func, self)
+							
+    def execute(self):
+        print('Registration via Web')
+							
+def execute_api(self): 
+    print('Registration via API')
+							
+def execute_database(self):
+    print('Registration via DB')							
+						</code></pre>
+				</section>
+				<section data-transition="none">
+					<h2>Python example</h2>
+					<pre>dsl/register_strategies.py
+						<code class="hljs python has-highlights" data-trim="" data-line-numbers="4,8-9">
+import types
+
+class RegisterStrategy:  # xUnit Fixture patterns
+    def __init__(self, func = None):
+        if func is not None:
+            self.execute = types.MethodType(func, self)
+							
+    def execute(self):
+        print('Registration via Web')  # Delegated Setup
+							
+def execute_api(self): 
+    print('Registration via API')  # Inline setup
+							
+def execute_database(self):
+    print('Registration via DB')  # Prebuild or Suite Setup							
+						</code></pre>
+				</section>
+				<section data-transition="none">
+					<h2>Python example</h2>
+					<pre>dsl/register_strategies.py
+						<code class="hljs python has-highlights" data-trim="" data-line-numbers="4,8-9">
+							if __name__ == '__main__':
+   web = RegisterStrategy()
+   api = RegisterStrategy(execute_api)  # python first-class functions
+   db = RegisterStrategy(execute_database)
+   web.execute()  # prints "Registration via Web"
+   api.execute()  # prints "Registration via API"
+   db.execute()   # prints "Registration via DB"
+						</code></pre>
+				</section>
+	
+				<section>
+					<h2> <b style="color:red;">Proxy</b></h2>
+					<p>
+						In its most general form, is a class functioning as an <b style="color:red;">interface to something else</b>. The proxy could be interface to anything: 
+						a network connection, a large object in memory, or some other resource that is expensive or impossible to duplicate. 
+					</p>
+					<p class="fragment">
+						Is useful when we want to have <b style="color:red;">control over</b> some additional recourses. The most popular method of using it in tests,
+						 is to set up the HTTP proxy. It allows dynamically to enable and disable host blacklists, excluding or stubbing the
+						  third-party services, like Facebook or Google in our tests. 
+					</p>
+				</section>
+				<section data-transition="none">
+					<h2> Proxy pattern (2)</h2>
+					<img src="./images/proxy.jpeg" alt="" height="300px" width="500px">
+				</section>
+				<section data-transition="none">
+					<h2> Proxy pattern (2)</h2>
+					<img src="./images/proxy1.jpeg" alt="" height="300px" width="500px">
+				</section>
+				<section data-transition="none">
+					<h2> Proxy pattern (2)</h2>
+					<img src="./images/proxy2.jpeg" alt="" height="300px" width="500px">
+				</section>
+				<section data-transition="none">
+					<h2> Proxy pattern (2)</h2>
+					<img src="./images/proxy3.jpeg" alt="" height="300px" width="500px">
+				</section>
+				<section data-transition="none">
+					<h2> Proxy pattern (2)</h2>
+					<img src="./images/proxy4.jpeg" alt="" height="300px" width="500px">
+				</section>
+				<section data-transition="none">
+					<h2> Proxy pattern (2)</h2>
+					<img src="./images/proxy5.jpeg" alt="" height="300px" width="500px">
+				</section>
+				<section data-transition="none">
+					<h2> Proxy pattern (2)</h2>
+					<img src="./images/proxy6.jpeg" alt="" height="300px" width="500px">
+				</section>
+				<section data-transition="none">
+					<h2> Proxy pattern (2)</h2>
+					<img src="./images/proxy7.jpeg" alt="" height="300px" width="500px">
+				</section>
+				<section data-transition="none">
+					<h2> Proxy pattern (2)</h2>
+					<img src="./images/proxy8.jpeg" alt="" height="300px" width="500px">
+				</section>
+				<section>
+					<!-- https://blog.bitsrc.io/a-practical-guide-to-es6-proxy-229079c3c2f0 -->
+					<h2>JS example</h2>
+					<pre>core/media_caching_proxy.js
+						<code class="hljs javascript has-highlights" data-trim="" data-line-numbers="4,8-9">
+// networkFetch(url) by defaul will download resources every time
+const cache = [];
+const proxiedNetworkFetch = new Proxy(networkFetch, {
+  apply(target, thisArg, args) {
+    const urlParam = args[0];
+    if (cache.includes(urlParam)) {
+      return `${urlParam} - Response from cache`;
+    } else {
+    cache.push(urlParam);
+    return Reflect.apply(target, thisArg, args);
+   }
+  },
+});
+						</code></pre>
+				</section>
+				<section data-transition="none">
+					<h2> Attack Proxy pattern</h2>
+					<img src="./images/aproxy.png" alt="" height="300px" width="500px">
+				</section>
+				<section data-transition="none">
+					<h2> Attack Proxy pattern</h2>
+					<img src="./images/aproxy2.png" alt="" height="300px" width="500px">
+				</section>
+				<section data-transition="none">
+					<h2> Attack Proxy pattern</h2>
+					<img src="./images/aproxy3.png" alt="" height="300px" width="500px">
+				</section>
+			</section>
+			</section>
+
+            <section>
+				<section>
+					<h2><b style="color:red;">Data warehouse</b> testing</h2>
+					<img src="images/dwh.jpeg" alt="dwh" width="550" height="300">
+				</section>
+				<section>
+					<h2>Data warehouse</h2>
+					<p>
+						<b style="color:red;">Central repositories of integrated data</b> from one or more disparate sources. They store current and historical data 
+						in one single place that are used for creating analytical reports.
+					</p>
+					<p class="fragment">
+						Is considered a <b style="color:red;">core component of business</b> intelligence.
+					</p>
+				</section>
+				<section>
+					<h2>Data warehouse testing</h2>
+					<p>
+					<b style="color:red;">Data-centric</b> testing is needed, to check if the data in a warehouse has integrity and is reliable, 
+					accurate, and consistent within the organization.
+					</p>
+					<p class="fragment">
+						Should cover the <b style="color:red;">complete data pipeline</b>, during extract, transform, and load (ETL) operations, validating data at all intermediate stages.
+					</p>
+				</section>
+				<section>
+					<h2>Data warehouse testing (2)</h2>
+					<p>
+						The testing <b style="color:red;">also covers business intelligence</b> (BI) reports and dashboards that run using the 
+						consolidated data as its source.
+					</p>
+					<p class="fragment">
+						Although the primary focus here is on the data itself, application components such as ETL tools, reporting engines, or GUI applications 
+						need to be included in the testing framework. 
+					</p>
+				</section>
+				<section>
+					<h2><b style="color:red;">Pipes and Filters</b> pattern</h2>
+					<p>
+						<b style="color:red;">Decompose</b> a task that performs <b style="color:red;">complex processing</b> into a series of separate elements that can be reused. This can
+						 improve performance, scalability, and reusability by allowing task elements that perform the processing to be deployed and scaled independently.
+					</p>
+				</section>
+				<section>
+					<img src="images/pipes-filters.png" alt="pf">
+				</section>
+				<section>
+					<h2><b style="color:red;">Facade</b> design pattern</h2>
+					<p>
+						An object that provides a <b style="color:red;">simplified interface to a large system</b>. It makes it easier to use and understand, 
+						is more readable, and reduces dependencies on external or other code.
+					</p>
+					<p class="fragment">
+						<b style="color:red;">D</b>ependency <b style="color:red;">I</b>nversion <b style="color:red;">P</b>rinciple suggest that our high-level components should not depend on our low-level ones.
+						 Both should <b style="color:red;">depend on abstractions</b>.
+					</p>
+				</section>
+				<section data-transition="none">
+					<h2> Facade pattern (2)</h2>
+					<img src="./images/facade.png" alt="" height="400px" width="600px">
+				</section>
+				<section data-transition="none">
+					<h2> Facade pattern (2)</h2>
+					<img src="./images/facade2.png" alt="" height="400px" width="600px">
+				</section>
+				<section data-transition="none">
+					<h2> Facade pattern (2)</h2>
+					<img src="./images/facade3.png" alt="" height="400px" width="600px">
+				</section>
+				<section data-transition="none">
+					<h2> Facade pattern (2)</h2>
+					<img src="./images/facade4.png" alt="" height="400px" width="600px">
+				</section>
+				<section>
+					<!-- https://www.journaldev.com/1557/facade-design-pattern-in-java -->
+					<h2>Java example</h2>
+					<pre>core/DataWarehouseFacade.java
+						<code class="hljs java has-highlights" data-trim="" data-line-numbers="4,8-9">
+						public class DataWarehouseFacade {
+  public static void generateReport(DBTypes dbType, 
+                                   ReportTypes reportType){
+    Connection con = null;
+    switch (dbType){
+      case MYSQL: 
+        con = MySqlHelper.getMySqlDBConnection();
+        MySqlHelper mySqlHelper = new MySqlHelper();
+        switch(reportType){
+        case HTML:
+          mySqlHelper.generateMySqlHTMLReport(tableName, con);
+          break;
+        case PDF:
+          mySqlHelper.generateMySqlPDFReport(tableName, con);
+          break;
+        }
+        break;
+      case ORACLE: 
+        con = OracleHelper.getOracleDBConnection();
+        OracleHelper oracleHelper = new OracleHelper();
+        switch(reportType){
+          case HTML:
+            oracleHelper.generateOracleHTMLReport(tableName, con);
+            break;
+          case PDF:
+            oracleHelper.generateOraclePDFReport(tableName, con);
+            break;
+        }
+        break;
+    }								
+  }
+}		
+                        </code></pre>
+				</section>
+				<section>
+					<h2><b style="color:red;">Immutable</b> Shared Fixture</h2>
+					<p>
+						To avoid <b><i>Erratic</i></b>  tests, that modify a Shared Fixture, we <b style="color:red;">partition the setup</b> needed by tests into two logical parts. 
+					</p>
+					<p class="fragment">
+						The <b style="color:red;">first</b> part is the stuff that every test needs to have present, but <b style="color:red;">never modified</b>. 
+					</p>
+					<p class="fragment">
+						The <b style="color:red;">second</b> part is the objects which any test <b style="color:red;">needs to modify</b>.
+					</p>
+				</section>
+				<section>
+					<h2>Java example</h2>
+					<pre>test/SharedFixtureFlightManagementFacadeTest.java
+						<code class="hljs java has-highlights" data-trim="" data-line-numbers="4,8-9">
+protected void setUp() throws Exception { // Shared Fixture
+  facade = new FlightMgmtFacadeImpl();
+  airport = setupNationalAirportsAndFlights();
+}
+
+public void testCancel_proposed() throws Exception {
+  BigDecimal mutableFlightId = airport.createFlight("Tokyo", "Osaka");
+  facade.cancelFlight(mutableFlightId);
+  assertEquals("CANCELLED", facade.findFlightById(mutableFlightId));
+}
+                        </code></pre>
+				</section>
+				<section>
+					<h2><b style="color:red;">Multiton</b> design pattern</h2>
+					<p>
+						Helps us to manage a map of named instances as key-value pairs. Ensuring a class only has <b style="color:red;">limited number of instances</b>, and provide a global point of access to them.
+					</p>
+					<p class="fragment">
+						Also <b style="color:red;">simplifies</b> retrieval of shared objects (fixtures).
+					</p>
+				</section>
+				<section>
+					<h2>C# example</h2>
+					<pre>core/SharedFixtureFlightManagementFacadeTest.java
+						<code class="hljs csharp has-highlights" data-trim="" data-line-numbers="4,8-9">
+							public sealed class SqlDatabase
+{
+  static Dictionary&lt;string, SqlDatabase&gt; _instances = 
+    new Dictionary&lt;string, SqlDatabase&gt;();
+  static object _lock = new object();
+  private SqlDatabase() { }
+
+  public static SqlDatabase GetMultiton(string sqlInstanceId)
+  {
+    lock (_lock)
+    {
+      if (!_instances.ContainsKey(sqlInstanceId)) _instances.Add(sqlInstanceId, new SqlDatabase());
+    }
+    return _instances[sqlInstanceId];
+  }
+}
+                        </code></pre>
+				</section>
+	
+			</section>
+
+			<section>
+				<h2>Conclusion</h2>
+				<p>
+					 Understanding of how technology stack works <b style="color:red;">is a must</b>!
+				</p>
+				<p class="fragment">
+					Acknowledge <b style="color:red;">challenges</b> and build the most fit for purpose solutions. 
+				</p>
+				<p class="fragment">
+					Use design patterns and concepts to allow <b style="color:red;">evolution</b> of scalable, maintainable and extendible testware.
+				</p>
+			</section>
+
+			<section>
+				<h2>THANK YOU!</h2>
+				<img width="450" height="300" data-src="images/pacman.gif">
+				<p>Contact me at:</p>
+				<img width="50" height="50" data-src="images/github.png" style="margin-bottom: -10px !important;">
+				/ekostadinov
+				<img width="50" height="50" data-src="images/gmail.jpg" style="margin-bottom: -10px !important;">
+				evgenikostadinov
+				<img width="50" height="50" data-src="images/in.png" style="margin-bottom: -10px !important;">
+				/in/ekostadinov
+			</section>
+
+
+		</div>
+	</div>
+
+	<script src="lib/js/head.min.js"></script>
+	<script src="js/reveal.js"></script>
+
+	<script>
+
+		// More info https://github.com/hakimel/reveal.js#configuration
+		Reveal.initialize({
+			controls: true,
+			progress: true,
+			history: true,
+			center: true,
+
+			transition: 'slide', // none/fade/slide/convex/concave/zoom
+
+			// More info https://github.com/hakimel/reveal.js#dependencies
+			dependencies: [
+				{ src: 'lib/js/classList.js', condition: function () { return !document.body.classList; } },
+				{ src: 'plugin/markdown/marked.js', condition: function () { return !!document.querySelector('[data-markdown]'); } },
+				{ src: 'plugin/markdown/markdown.js', condition: function () { return !!document.querySelector('[data-markdown]'); } },
+				{ src: 'plugin/highlight/highlight.js', async: true, callback: function () { hljs.initHighlightingOnLoad(); } },
+				{ src: 'plugin/zoom-js/zoom.js', async: true },
+				{ src: 'plugin/notes/notes.js', async: true }
+			]
+		});
+
+	</script>
+
+</body>
+
+</html>
